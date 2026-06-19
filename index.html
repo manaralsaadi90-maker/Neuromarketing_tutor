@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neuromarketing Tutor — Fontys University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple: #534AB7;
+    --purple-light: #EEEDFE;
+    --purple-mid: #7F77DD;
+    --purple-dark: #3C3489;
+    --bg: #F7F6FD;
+    --surface: #FFFFFF;
+    --surface2: #F2F1FB;
+    --border: rgba(83,74,183,0.15);
+    --border2: rgba(83,74,183,0.28);
+    --text: #1a1730;
+    --text2: #5a5580;
+    --text3: #9691b8;
+    --green-bg: #EAF3DE; --green-border: #639922; --green-text: #27500A;
+    --red-bg: #FCEBEB; --red-border: #E24B4A; --red-text: #501313;
+    --amber-bg: #FAEEDA; --amber-border: #BA7517; --amber-text: #633806;
+    --radius: 10px; --radius-lg: 14px;
+    --shadow: 0 2px 12px rgba(83,74,183,0.08);
+    --shadow-md: 0 4px 24px rgba(83,74,183,0.13);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  .app-header {
+    background: var(--purple-dark);
+    color: white;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 16px rgba(60,52,137,0.25);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .app-header .logo {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .app-header h1 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; letter-spacing: 0.2px; }
+  .app-header p { font-size: 12px; opacity: 0.7; margin-top: 1px; }
+  .header-badge {
+    margin-left: auto;
+    background: rgba(255,255,255,0.18);
+    font-size: 12px; font-weight: 500;
+    padding: 5px 12px; border-radius: 99px;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  /* LAYOUT */
+  .app-body {
+    display: flex;
+    flex: 1;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--text3);
+    padding: 0 1.25rem; margin-bottom: 8px;
+  }
+  .lec-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 1.25rem; cursor: pointer;
+    border: none; background: none; text-align: left; width: 100%;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .lec-btn:hover { background: var(--purple-light); }
+  .lec-btn.active { background: var(--purple-light); border-left-color: var(--purple); }
+  .lec-btn .lec-num {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    background: var(--purple-light); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: var(--purple);
+  }
+  .lec-btn.active .lec-num { background: var(--purple); color: white; border-color: var(--purple); }
+  .lec-btn .lec-info { flex: 1; min-width: 0; }
+  .lec-btn .lec-title { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.3; }
+  .lec-btn .lec-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
+  .sidebar-sep { border: none; border-top: 1px solid var(--border); margin: 1rem 1.25rem; }
+  .sidebar-action {
+    padding: 10px 1.25rem; cursor: pointer;
+    border: none; background: none; text-align: left; width: 100%;
+    font-size: 13px; color: var(--purple); font-weight: 500;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sidebar-action:hover { background: var(--purple-light); }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    max-width: 860px;
+  }
+
+  /* LECTURE HEADER */
+  .lec-header {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .lec-emoji { font-size: 36px; line-height: 1; }
+  .lec-header h2 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; }
+  .lec-header p { font-size: 13px; color: var(--text2); margin-top: 3px; }
+  .lec-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .tag {
+    font-size: 11px; font-weight: 500; padding: 3px 10px;
+    border-radius: 99px; background: var(--purple-light);
+    color: var(--purple); border: 1px solid var(--border);
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex; gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 4px;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .tab-btn {
+    flex: 1; padding: 9px 6px;
+    font-size: 13px; font-weight: 500;
+    border: none; background: none; cursor: pointer;
+    color: var(--text2); border-radius: 8px;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover:not(.active) { background: var(--purple-light); color: var(--purple); }
+  .tab-btn.active { background: var(--purple); color: white; box-shadow: 0 2px 8px rgba(83,74,183,0.3); }
+
+  /* PANEL */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .card h3 {
+    font-size: 14px; font-weight: 600; color: var(--purple);
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 1rem; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card h3 .icon { font-size: 18px; }
+
+  /* SUMMARY LIST */
+  .summary-list { list-style: none; }
+  .summary-list li {
+    padding: 7px 0; font-size: 14px; color: var(--text);
+    border-bottom: 1px solid var(--border); line-height: 1.6;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .summary-list li:last-child { border-bottom: none; }
+  .summary-list li::before { content: "→"; color: var(--purple-mid); font-weight: 600; flex-shrink: 0; margin-top: 1px; }
+
+  /* TERMS GRID */
+  .terms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .term-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .term-card .term-name {
+    font-size: 12px; font-weight: 600; color: var(--purple);
+    text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 5px;
+  }
+  .term-card .term-def { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+  /* FLASHCARDS */
+  .fc-progress {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;
+  }
+  .fc-progress .fc-count { font-size: 24px; font-weight: 600; color: var(--purple); min-width: 60px; }
+  .fc-progress .fc-label { font-size: 13px; color: var(--text2); }
+  .fc-dots { display: flex; gap: 4px; flex-wrap: wrap; }
+  .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--surface2); border: 1px solid var(--border2);
+    transition: all 0.2s;
+  }
+  .dot.current { background: var(--purple); border-color: var(--purple); transform: scale(1.2); }
+  .dot.seen { background: var(--purple-mid); border-color: var(--purple-mid); }
+
+  .flashcard {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 2rem;
+    min-height: 200px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-md);
+  }
+  .flashcard:hover { border-color: var(--purple-mid); transform: translateY(-2px); box-shadow: 0 6px 28px rgba(83,74,183,0.15); }
+  .flashcard.revealed { border-color: var(--purple); background: var(--purple-light); }
+  .fc-mode-label {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--text3); margin-bottom: 14px;
+  }
+  .flashcard.revealed .fc-mode-label { color: var(--purple); }
+  .fc-question { font-size: 16px; font-weight: 500; color: var(--text); line-height: 1.5; }
+  .flashcard.revealed .fc-question { color: var(--purple); font-size: 14px; margin-bottom: 12px; }
+  .fc-answer {
+    font-size: 14px; color: var(--text2); line-height: 1.6;
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--border2); display: none;
+  }
+  .flashcard.revealed .fc-answer { display: block; color: var(--text); }
+  .fc-hint { font-size: 12px; color: var(--text3); text-align: center; margin-bottom: 1rem; }
+  .fc-nav { display: flex; gap: 8px; justify-content: center; align-items: center; }
+  .btn { 
+    padding: 9px 20px; font-size: 13px; font-weight: 500;
+    border-radius: var(--radius); cursor: pointer;
+    border: 1px solid var(--border2); background: var(--surface);
+    color: var(--text); transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+  }
+  .btn:hover { background: var(--purple-light); border-color: var(--purple-mid); color: var(--purple); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-primary {
+    background: var(--purple); color: white; border-color: var(--purple);
+  }
+  .btn-primary:hover { background: var(--purple-dark); border-color: var(--purple-dark); color: white; }
+
+  /* QUIZ */
+  .quiz-question { font-size: 16px; font-weight: 500; line-height: 1.6; margin-bottom: 1.25rem; color: var(--text); }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+  .quiz-opt {
+    padding: 12px 16px; font-size: 14px; border-radius: var(--radius);
+    border: 1px solid var(--border2); background: var(--surface);
+    cursor: pointer; text-align: left; transition: all 0.15s;
+    color: var(--text); font-family: 'DM Sans', sans-serif; line-height: 1.5;
+  }
+  .quiz-opt:hover:not(:disabled) { background: var(--purple-light); border-color: var(--purple-mid); }
+  .quiz-opt.correct { background: var(--green-bg); border-color: var(--green-border); color: var(--green-text); }
+  .quiz-opt.wrong { background: var(--red-bg); border-color: var(--red-border); color: var(--red-text); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback {
+    padding: 12px 16px; border-radius: var(--radius);
+    font-size: 13px; line-height: 1.6; margin-bottom: 1rem;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green-text); }
+  .quiz-feedback.no { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red-text); }
+  .quiz-complete {
+    text-align: center; padding: 2rem;
+    background: var(--purple-light); border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+  }
+  .quiz-complete .score-big { font-family: 'DM Serif Display', serif; font-size: 54px; color: var(--purple); }
+  .quiz-complete .score-label { font-size: 16px; color: var(--text2); margin-top: 4px; }
+  .quiz-complete .score-msg { font-size: 14px; color: var(--text); margin-top: 12px; }
+
+  /* EXAM TIPS */
+  .tip-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 11px 0; border-bottom: 1px solid var(--border);
+    font-size: 14px; line-height: 1.6; color: var(--text);
+  }
+  .tip-item:last-child { border-bottom: none; }
+  .priority-badge {
+    font-size: 10px; font-weight: 600; padding: 3px 8px;
+    border-radius: 99px; flex-shrink: 0; margin-top: 2px;
+  }
+  .priority-high { background: var(--red-bg); color: var(--red-text); border: 1px solid var(--red-border); }
+  .priority-med { background: var(--amber-bg); color: var(--amber-text); border: 1px solid var(--amber-border); }
+
+  /* AI BUTTON */
+  .ai-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
+    color: white; border: none; border-radius: var(--radius);
+    padding: 11px 20px; font-size: 13px; font-weight: 600;
+    cursor: pointer; width: 100%; margin-top: 1rem;
+    font-family: 'DM Sans', sans-serif;
+    box-shadow: 0 2px 10px rgba(83,74,183,0.3);
+    transition: all 0.15s;
+  }
+  .ai-btn:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(83,74,183,0.4); }
+  .ai-btn .ai-icon { font-size: 16px; }
+
+  /* MOCK EXAM PANEL */
+  .mock-intro {
+    text-align: center; padding: 2rem;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .mock-intro h3 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; margin-bottom: 8px; }
+  .mock-intro p { font-size: 14px; color: var(--text2); margin-bottom: 1.5rem; line-height: 1.6; }
+  .lec-select-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1.25rem; }
+  .lec-check {
+    display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); cursor: pointer;
+    font-size: 13px; font-weight: 500; color: var(--text);
+  }
+  .lec-check input { accent-color: var(--purple); cursor: pointer; }
+  .lec-check:hover { background: var(--purple-light); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* MOBILE BOTTOM NAV */
+  .mobile-nav {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 6px 4px env(safe-area-inset-bottom, 6px);
+    box-shadow: 0 -2px 12px rgba(83,74,183,0.1);
+  }
+  .mobile-nav-inner { display: flex; align-items: center; }
+  .mob-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 3px; padding: 6px 2px;
+    border: none; background: none; cursor: pointer;
+    border-radius: 8px; transition: background 0.15s;
+  }
+  .mob-btn:hover { background: var(--purple-light); }
+  .mob-btn.active .mob-icon { background: var(--purple); color: white; }
+  .mob-btn.active .mob-label { color: var(--purple); font-weight: 600; }
+  .mob-icon {
+    width: 34px; height: 34px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; background: var(--surface2);
+    transition: background 0.15s;
+  }
+  .mob-label { font-size: 9px; color: var(--text3); font-weight: 500; letter-spacing: 0.2px; }
+
+  /* LECTURE DRAWER (mobile) */
+  .mob-drawer-overlay {
+    display: none; position: fixed; inset: 0; z-index: 300;
+    background: rgba(26,23,48,0.5); backdrop-filter: blur(2px);
+  }
+  .mob-drawer-overlay.open { display: block; }
+  .mob-drawer {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 400;
+    background: var(--surface); border-radius: 20px 20px 0 0;
+    padding: 0 0 env(safe-area-inset-bottom, 16px);
+    transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+    max-height: 80vh; overflow-y: auto;
+  }
+  .mob-drawer.open { transform: translateY(0); }
+  .mob-drawer-handle {
+    width: 36px; height: 4px; border-radius: 2px;
+    background: var(--border2); margin: 12px auto 4px;
+  }
+  .mob-drawer-title {
+    font-size: 11px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--text3);
+    padding: 8px 16px 8px;
+  }
+  .mob-lec-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; cursor: pointer; border: none; background: none;
+    width: 100%; text-align: left; border-bottom: 1px solid var(--border);
+  }
+  .mob-lec-item:last-child { border-bottom: none; }
+  .mob-lec-item:active { background: var(--purple-light); }
+  .mob-lec-item.active { background: var(--purple-light); }
+  .mob-lec-item .mob-lec-num {
+    width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+    background: var(--surface2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--purple);
+  }
+  .mob-lec-item.active .mob-lec-num { background: var(--purple); color: white; }
+  .mob-lec-item .mob-lec-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .mob-lec-item .mob-lec-sub { font-size: 12px; color: var(--text3); margin-top: 1px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .sidebar { display: none; }
+    .main { padding: 1rem 0.875rem; padding-bottom: 90px; }
+    .terms-grid { grid-template-columns: 1fr; }
+    .lec-select-grid { grid-template-columns: 1fr 1fr; }
+    .mobile-nav { display: block; }
+    .app-header { padding: 0.875rem 1rem; }
+    .app-header h1 { font-size: 17px; }
+    .app-header p { font-size: 11px; }
+    .tabs { flex-wrap: nowrap; overflow-x: auto; gap: 2px; padding: 3px; }
+    .tab-btn { font-size: 12px; padding: 8px 4px; white-space: nowrap; min-width: 0; }
+    .flashcard { padding: 1.75rem 1.25rem; min-height: 170px; }
+    .lec-header { padding: 1rem; }
+    .lec-header h2 { font-size: 18px; }
+    .card { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="logo">🧠</div>
+  <div>
+    <h1>Neuromarketing Tutor</h1>
+    <p>Fontys University — Exam Preparation</p>
+  </div>
+  <div class="header-badge">6 Lectures</div>
+</header>
+
+<div class="app-body">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-label">Lectures</div>
+    <button class="lec-btn active" onclick="selectLec(1,this)">
+      <div class="lec-num">1</div>
+      <div class="lec-info">
+        <div class="lec-title">Introduction</div>
+        <div class="lec-sub">Neuromarketing basics</div>
+      </div>
+    </button>
+    <button class="lec-btn" onclick="selectLec(2,this)">
+      <div class="lec-num">2</div>
+      <div class="lec-info">
+        <div class="lec-title">Motivation & Involvement</div>
+        <div class="lec-sub">Maslow · ELM</div>
+      </div>
+    </button>
+    <button class="lec-btn" onclick="selectLec(3,this)">
+      <div class="lec-num">3</div>
+      <div class="lec-info">
+        <div class="lec-title">Perception</div>
+        <div class="lec-sub">JND · Gestalt · Sensory</div>
+      </div>
+    </button>
+    <button class="lec-btn" onclick="selectLec(4,this)">
+      <div class="lec-num">4</div>
+      <div class="lec-info">
+        <div class="lec-title">Memory & Learning</div>
+        <div class="lec-sub">Conditioning · Schemas</div>
+      </div>
+    </button>
+    <button class="lec-btn" onclick="selectLec(5,this)">
+      <div class="lec-num">5</div>
+      <div class="lec-info">
+        <div class="lec-title">Attitudes</div>
+        <div class="lec-sub">ABC · Dissonance · Katz</div>
+      </div>
+    </button>
+    <button class="lec-btn" onclick="selectLec(6,this)">
+      <div class="lec-num">6</div>
+      <div class="lec-info">
+        <div class="lec-title">Persuasion</div>
+        <div class="lec-sub">ELM · Cialdini</div>
+      </div>
+    </button>
+    <hr class="sidebar-sep">
+    <button class="sidebar-action" onclick="selectLec('mock', null)">
+      📝 Full Mock Exam
+    </button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="main-content">
+    <!-- Rendered by JS -->
+  </main>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <button class="mob-btn active" id="mob-btn-lec" onclick="openDrawer()">
+      <div class="mob-icon">📚</div>
+      <div class="mob-label">Lectures</div>
+    </button>
+    <button class="mob-btn" id="mob-btn-sum" onclick="mobTab('summary')">
+      <div class="mob-icon">📋</div>
+      <div class="mob-label">Summary</div>
+    </button>
+    <button class="mob-btn" id="mob-btn-fc" onclick="mobTab('flashcards')">
+      <div class="mob-icon">🃏</div>
+      <div class="mob-label">Cards</div>
+    </button>
+    <button class="mob-btn" id="mob-btn-qz" onclick="mobTab('quiz')">
+      <div class="mob-icon">🧪</div>
+      <div class="mob-label">Quiz</div>
+    </button>
+    <button class="mob-btn" id="mob-btn-mock" onclick="mobMock()">
+      <div class="mob-icon">📝</div>
+      <div class="mob-label">Mock Exam</div>
+    </button>
+  </div>
+</nav>
+
+<!-- LECTURE DRAWER (mobile) -->
+<div class="mob-drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="mob-drawer" id="mob-drawer">
+  <div class="mob-drawer-handle"></div>
+  <div class="mob-drawer-title">Choose a Lecture</div>
+  <button class="mob-lec-item active" id="mob-item-1" onclick="mobSelectLec(1)">
+    <div class="mob-lec-num">1</div>
+    <div><div class="mob-lec-title">Introduction</div><div class="mob-lec-sub">Neuromarketing basics</div></div>
+  </button>
+  <button class="mob-lec-item" id="mob-item-2" onclick="mobSelectLec(2)">
+    <div class="mob-lec-num">2</div>
+    <div><div class="mob-lec-title">Motivation & Involvement</div><div class="mob-lec-sub">Maslow · ELM</div></div>
+  </button>
+  <button class="mob-lec-item" id="mob-item-3" onclick="mobSelectLec(3)">
+    <div class="mob-lec-num">3</div>
+    <div><div class="mob-lec-title">Perception</div><div class="mob-lec-sub">JND · Gestalt · Sensory</div></div>
+  </button>
+  <button class="mob-lec-item" id="mob-item-4" onclick="mobSelectLec(4)">
+    <div class="mob-lec-num">4</div>
+    <div><div class="mob-lec-title">Memory & Learning</div><div class="mob-lec-sub">Conditioning · Schemas</div></div>
+  </button>
+  <button class="mob-lec-item" id="mob-item-5" onclick="mobSelectLec(5)">
+    <div class="mob-lec-num">5</div>
+    <div><div class="mob-lec-title">Attitudes</div><div class="mob-lec-sub">ABC · Dissonance · Katz</div></div>
+  </button>
+  <button class="mob-lec-item" id="mob-item-6" onclick="mobSelectLec(6)">
+    <div class="mob-lec-num">6</div>
+    <div><div class="mob-lec-title">Persuasion</div><div class="mob-lec-sub">ELM · Cialdini</div></div>
+  </button>
+</div>
+
+<script>
+const LECTURES = {
+  1: {
+    title: "Introduction to Neuromarketing",
+    subtitle: "What is neuromarketing? How does the brain drive consumer decisions?",
+    emoji: "🧠",
+    tags: ["Neuromarketing","fMRI / PET Scan","Pepsi Challenge","New Coke","Consumer Decisions"],
+    summary: [
+      "Neuromarketing = the combination of Neuroscience + Marketing",
+      "Neuroscience focuses on UNCONSCIOUS behavior: emotions, feelings, intuition",
+      "Traditional marketing focuses on CONSCIOUS behavior: facts, reason, logic",
+      "Brain imaging tools used: fMRI (functional MRI) and PET scans",
+      "New Coke Case: Pepsi won blind taste tests → Coke changed its formula → massive failure",
+      "Coke failed because drinking it was an experience involving thoughts, feelings, and memories — not just taste",
+      "Pepsi Challenge (2004) — blind tasting: Pepsi wins. Non-blind: 75% chose Coke",
+      "Brain scans showed: when drinking Coke non-blind, emotional, thinking AND memory areas lit up",
+      "Conclusion: emotions, thoughts, and memories unconsciously influence consumer decisions",
+      "Applied neuromarketing: effective packaging, advertising, store layout, pricing"
+    ],
+    terms: [
+      { t: "Neuromarketing", d: "The combination of neuroscience and marketing to understand how the brain drives consumer decisions, especially unconscious ones." },
+      { t: "fMRI", d: "Functional MRI — brain imaging tool that shows which brain areas activate during experiences and decisions." },
+      { t: "PET Scan", d: "Positron Emission Tomography — another brain imaging technique used in neuromarketing research." },
+      { t: "Unconscious behavior", d: "Decisions and feelings driven by emotions, intuition, and memories — not by rational thought." },
+      { t: "Conscious behavior", d: "Decisions based on facts, reason, and logic — studied by traditional marketing research." },
+      { t: "Consumer Decision Process", d: "The stages a consumer goes through from recognizing a need to making a purchase and evaluating it." },
+    ],
+    flashcards: [
+      { q: "What is Neuromarketing?", a: "The combination of neuroscience and marketing to understand how the brain drives consumer decisions, especially unconscious behavior such as emotions, feelings, and intuition." },
+      { q: "What does neuroscience focus on vs traditional marketing?", a: "Neuroscience = unconscious behavior (emotions, feelings, intuition). Marketing = conscious behavior (facts, reason, logic). Neuromarketing bridges both." },
+      { q: "What tools does neuromarketing use to study the brain?", a: "fMRI (functional MRI) and PET scans — they map brain activity to specific cognitive functions and reveal unconscious reactions to marketing stimuli." },
+      { q: "What happened in the New Coke case?", a: "Coke lost blind taste tests vs Pepsi, so they changed the formula. People hated it — because Coke was an emotional experience (memories, feelings), not just taste. Neuromarketing explains this failure." },
+      { q: "What were the results of the Pepsi Challenge (2004)?", a: "Blind tasting → Pepsi preferred on taste. Non-blind tasting → 75% chose Coke, and brain scans showed emotional/memory areas activated only for Coke. Brand beats taste." },
+      { q: "What is the key marketing insight from the Pepsi Challenge?", a: "Emotions, thoughts, and memories unconsciously influence consumer decisions. A brand is an emotional experience — much more powerful than product features alone." },
+    ],
+    quiz: [
+      { q: "What is the correct definition of Neuromarketing?", opts: ["Using social media platforms to promote products","The combination of neuroscience and marketing to understand consumer behavior","Using data analytics to track purchase history","Traditional market research using focus groups and surveys"], ans: 1, exp: "Neuromarketing is specifically the combination of neuroscience and marketing — it studies unconscious brain responses to marketing stimuli." },
+      { q: "In the Pepsi Challenge (2004), what happened in the BLIND taste test?", opts: ["Coca-Cola won by a significant margin","Results were exactly equal","Pepsi was preferred by most participants","Participants could not detect a difference"], ans: 2, exp: "In the blind tasting, Pepsi was preferred — consumers rated its taste higher without knowing which brand they were drinking." },
+      { q: "What did brain scans reveal during the NON-BLIND Pepsi Challenge when drinking Coca-Cola?", opts: ["Only the taste cortex activated","The emotional, thinking, and memory parts of the brain became very active","Pepsi caused stronger brain activation","No brain differences were detected between the two brands"], ans: 1, exp: "When participants knew they were drinking Coke, the emotional, thinking, AND memory brain areas activated — proving that brand association shapes the experience." },
+      { q: "Which brain imaging techniques are used in neuromarketing research?", opts: ["CT scan and X-ray","EEG and heart rate monitor only","fMRI and PET scan","Ultrasound and structural MRI"], ans: 2, exp: "Neuromarketing uses fMRI (functional MRI) and PET scans to reveal which brain areas activate in response to marketing stimuli." },
+      { q: "Why did New Coke ultimately fail?", opts: ["The new flavor was objectively bad","Pepsi ran more effective advertising campaigns","The emotional brand connections were missing when Coke was reduced to just taste","Coca-Cola raised the price of New Coke significantly"], ans: 2, exp: "New Coke failed because drinking Coca-Cola was an experience involving thoughts, feelings, and memories — not just taste. Neuroscience explains what traditional taste research missed." },
+    ],
+    examTips: [
+      { tip: "Neuroscience = UNCONSCIOUS behavior. Traditional Marketing = CONSCIOUS behavior. This distinction is a very common exam question.", level: "high" },
+      { tip: "Know BOTH the blind AND non-blind results of the Pepsi Challenge separately — exams often ask about one specific condition.", level: "high" },
+      { tip: "fMRI = functional MRI. PET = Positron Emission Tomography. Both image brain activity, not structure.", level: "med" },
+      { tip: "New Coke lesson: consumer behavior is NOT purely rational. Emotions and memory powerfully shape decisions.", level: "high" },
+      { tip: "Neuromarketing helps explain why products that passed traditional research STILL fail (New Coke scored well in taste tests!).", level: "med" },
+    ]
+  },
+  2: {
+    title: "Motivation & Involvement",
+    subtitle: "Why do consumers buy? How much effort do they put into decisions?",
+    emoji: "⚡",
+    tags: ["Maslow's Hierarchy","ELM","High vs Low Involvement","Hedonic vs Utilitarian","Decision Process"],
+    summary: [
+      "Motivation = internal drive pushing consumers toward satisfying a need or goal",
+      "Maslow's Hierarchy: Physiological → Safety → Social → Esteem → Self-actualization",
+      "Must satisfy lower-level needs before higher ones become motivating",
+      "Involvement = level of personal relevance a consumer attaches to a product or decision",
+      "High involvement: expensive, risky, important purchases (car, house) — deep thinking",
+      "Low involvement: cheap, routine, low-risk purchases (toothpaste, candy) — habitual, minimal effort",
+      "ELM (Elaboration Likelihood Model): Central Route (high involvement) vs Peripheral Route (low involvement)",
+      "Central route: consumers process arguments carefully — strong arguments persuade",
+      "Peripheral route: consumers rely on surface cues — celebrity, music, colors persuade",
+      "Consumer Decision Process: Need Recognition → Info Search → Evaluate Alternatives → Purchase → Post-purchase",
+      "Hedonic motivation = pleasure-seeking, emotional (perfume, luxury)",
+      "Utilitarian motivation = functional, practical benefit (cleaning products, tools)"
+    ],
+    terms: [
+      { t: "Motivation", d: "The internal state or drive that activates and directs behavior toward satisfying a need or goal." },
+      { t: "Involvement", d: "The degree of personal relevance and importance a consumer attaches to a product or purchase decision." },
+      { t: "Maslow's Hierarchy", d: "A 5-level pyramid of needs: Physiological → Safety → Social → Esteem → Self-actualization. Lower needs must be met first." },
+      { t: "ELM", d: "Elaboration Likelihood Model: Central route (deep logical processing, high involvement) vs Peripheral route (surface cues, low involvement)." },
+      { t: "High Involvement", d: "Purchases requiring significant thought, effort, and time. Risk and personal importance are high. E.g. buying a car." },
+      { t: "Low Involvement", d: "Routine or inexpensive purchases made with little deliberate thinking. E.g. buying chewing gum." },
+      { t: "Hedonic motivation", d: "Driven by pleasure, fun, and emotional reward (e.g. buying perfume, going to a concert)." },
+      { t: "Utilitarian motivation", d: "Driven by functional, practical benefits — solves a problem (e.g. buying a vacuum cleaner, basic food)." },
+    ],
+    flashcards: [
+      { q: "What is motivation in consumer behavior?", a: "An internal drive or need state that pushes a consumer to take action toward satisfying a goal. It is the 'why' behind consumer behavior." },
+      { q: "What are the 5 levels of Maslow's Hierarchy in order?", a: "1. Physiological (food, water, shelter) 2. Safety (security, stability) 3. Social/Love & Belonging (friendship, family) 4. Esteem (achievement, status) 5. Self-actualization (reaching full potential)." },
+      { q: "What is the difference between high and low involvement?", a: "High involvement = personal, expensive, risky purchases requiring deliberate thought and information search. Low involvement = cheap, routine purchases with minimal cognitive effort." },
+      { q: "What is the ELM (Elaboration Likelihood Model)?", a: "A model explaining how persuasion works. Central route: logical arguments matter (high involvement). Peripheral route: surface cues like celebrity or music matter (low involvement)." },
+      { q: "Give 3 examples of high and 3 of low involvement purchases.", a: "High: buying a car, choosing a university, getting a mortgage. Low: choosing chewing gum, buying bread, picking a soft drink." },
+      { q: "What is hedonic vs utilitarian motivation?", a: "Hedonic = pleasure-seeking, emotional (luxury goods, entertainment). Utilitarian = practical, functional benefit (cleaning products, basic tools). Both can influence the same purchase." },
+    ],
+    quiz: [
+      { q: "Which level of Maslow's hierarchy does 'belonging to a social group' represent?", opts: ["Physiological","Safety","Social / Love & Belonging","Esteem"], ans: 2, exp: "Social/Love & Belonging is the 3rd level — it includes friendship, intimacy, family, and a sense of belonging to a community." },
+      { q: "According to the ELM, what route do LOW-involvement consumers primarily use?", opts: ["Central route","Peripheral route","Both routes equally","Neither route"], ans: 1, exp: "Low-involvement consumers use the peripheral route — they rely on surface cues (celebrity, music, packaging color) rather than deep evaluation of arguments." },
+      { q: "A consumer spends 3 weeks researching and comparing 8 laptops before buying one. This is:", opts: ["Low involvement purchase","Peripheral processing","High involvement purchase","Impulse buying"], ans: 2, exp: "Carefully researching an expensive, personally important item is classic high-involvement behavior — high personal relevance, high risk, deep central-route processing." },
+      { q: "Hedonic motivation is BEST described as:", opts: ["Buying for practical functional reasons to solve a problem","Buying driven by pleasure, emotions, and fun","Buying only what is strictly necessary","Buying based on the lowest price"], ans: 1, exp: "Hedonic motivation is about pleasure, fun, emotional satisfaction, and enjoyment — not practical functionality." },
+      { q: "What is the FIRST step in the Consumer Decision Making process?", opts: ["Information search","Evaluate alternatives","Need recognition","Purchase decision"], ans: 2, exp: "Need Recognition is the trigger — something creates a gap between the current state and desired state, activating the decision-making process." },
+    ],
+    examTips: [
+      { tip: "Remember Maslow's hierarchy in exact ORDER — Physiological → Safety → Social → Esteem → Self-actualization. Very common to list or apply.", level: "high" },
+      { tip: "ELM: High involvement = Central Route (process arguments logically). Low involvement = Peripheral Route (surface cues, shortcuts).", level: "high" },
+      { tip: "Be able to CLASSIFY purchases as high or low involvement AND explain WHY. Exams often give a scenario and ask which type it is.", level: "high" },
+      { tip: "Hedonic = emotions/pleasure. Utilitarian = function/practical. Easy to confuse — remember: hedonic = 'feels good', utilitarian = 'works well'.", level: "med" },
+      { tip: "Consumer Decision Process has 5 steps — memorize the order: Need Recognition → Info Search → Evaluate Alternatives → Purchase → Post-purchase Evaluation.", level: "med" },
+    ]
+  },
+  3: {
+    title: "Perception",
+    subtitle: "How do consumers select, organize, and interpret sensory information?",
+    emoji: "👁️",
+    tags: ["Sensation vs Perception","JND / Weber's Law","Gestalt Principles","Selective Attention","Sensory Marketing"],
+    summary: [
+      "Perception = how we select, organize, and interpret sensory information to understand the world",
+      "Sensation = raw input from senses. Perception = meaning we assign to that input",
+      "Selective Attention: we only consciously notice a tiny fraction of all stimuli around us",
+      "Absolute threshold = minimum level of stimulation needed for sensation to be detected",
+      "Differential threshold = smallest detectable CHANGE in stimulation — the JND",
+      "Weber's Law: JND is proportional to the magnitude of the original stimulus",
+      "Marketing use of JND: price increases or packaging size reductions below JND go unnoticed",
+      "Gestalt principles: Figure-Ground, Proximity, Similarity, Closure — how we organize visuals",
+      "Subliminal perception: stimuli below conscious awareness that can still influence behavior",
+      "Sensory marketing: deliberately using sight, sound, smell, touch, taste to influence consumers",
+      "Priming: exposure to one stimulus influences response to a later stimulus (unconscious association)"
+    ],
+    terms: [
+      { t: "Perception", d: "The active process of selecting, organizing, and interpreting sensory stimuli to create a meaningful picture of the world." },
+      { t: "Selective attention", d: "Our brain's filter — we consciously notice only certain stimuli and ignore most others." },
+      { t: "Absolute threshold", d: "The minimum intensity of a stimulus required for it to be detected at all (50% of the time)." },
+      { t: "JND / Weber's Law", d: "Just Noticeable Difference — the smallest detectable change. It is proportional to the original stimulus intensity." },
+      { t: "Gestalt principles", d: "Rules explaining how we organize visual elements: Figure-Ground, Proximity, Similarity, Closure." },
+      { t: "Subliminal perception", d: "Processing of stimuli that occur below the threshold of conscious awareness." },
+      { t: "Sensory marketing", d: "Strategically using all 5 senses (sight, sound, smell, touch, taste) in marketing to influence consumer emotions and behavior." },
+      { t: "Priming", d: "Prior exposure to a stimulus unconsciously influences response to a later stimulus, creating associations." },
+    ],
+    flashcards: [
+      { q: "What is the difference between sensation and perception?", a: "Sensation = the raw sensory data detected by our senses (input). Perception = how we interpret and give meaning to that data (processing). Same sensation → different perception for different people." },
+      { q: "What is Selective Attention and why does it matter for marketing?", a: "Our brain automatically filters out most stimuli — we only consciously notice a small fraction. Marketers must compete intensely to break through this filter and grab attention." },
+      { q: "What is Weber's Law / JND and how is it used in marketing?", a: "JND is proportional to the original stimulus. Marketers use this: raise prices slightly below JND so consumers don't notice. Or shrink packaging just below JND (shrinkflation)." },
+      { q: "Name and describe the 4 key Gestalt principles.", a: "1. Figure-Ground: separate foreground from background. 2. Proximity: nearby objects are seen as related. 3. Similarity: similar objects are grouped. 4. Closure: we complete incomplete shapes mentally." },
+      { q: "What is subliminal perception?", a: "Stimuli processed below the threshold of conscious awareness. Can influence attitudes and behavior subtly, though the effect size is debated. Used in some advertising." },
+      { q: "Give a real marketing example of sensory marketing.", a: "Supermarkets play slow music → shoppers walk slower → spend more time and buy more. Bakeries pump out fresh bread smells → increases food purchases. Coffee shops use warm lighting and soft wood → feel cozy → stay longer." },
+    ],
+    quiz: [
+      { q: "Weber's Law states that the JND (Just Noticeable Difference) is:", opts: ["Always the same fixed absolute amount","Proportional to the magnitude of the original stimulus","Random and unpredictable","Always exactly 10% of the original stimulus"], ans: 1, exp: "Weber's Law: the JND is proportional to the original stimulus intensity. The stronger the original, the bigger the change needs to be to be noticed." },
+      { q: "The Gestalt principle of Figure-Ground refers to:", opts: ["Grouping similar-looking objects together","Completing incomplete shapes mentally","Separating the main focus (figure) from the background (ground)","Perceiving nearby objects as related"], ans: 2, exp: "Figure-Ground: we automatically separate the main focus object (figure) from its background (ground). Used in logos and advertising composition." },
+      { q: "Selective attention in marketing means:", opts: ["Consumers read every advertisement carefully and fully","Consumers filter most stimuli and only notice those that are personally relevant","Consumers always prefer emotional over rational advertisements","All marketing stimuli are processed with equal attention"], ans: 1, exp: "Selective attention: consumers actively filter stimuli and only consciously process a small fraction. Marketers must make messages stand out." },
+      { q: "A supermarket plays slow French music and wine sales increase. This is an example of:", opts: ["Subliminal advertising","Sensory marketing and priming","Classical conditioning only","High involvement processing"], ans: 1, exp: "Sensory marketing — deliberately using sound to create atmosphere. The French music primes consumers to associate with France, increasing French wine purchases." },
+      { q: "Which Gestalt principle explains why we perceive incomplete shapes as complete?", opts: ["Proximity","Similarity","Closure","Figure-ground"], ans: 2, exp: "Closure — our brains automatically fill in gaps to complete shapes. Used in famous logos like the WWF panda or the NBC peacock." },
+    ],
+    examTips: [
+      { tip: "Sensation vs Perception: Sensation = raw input. Perception = interpretation. This distinction is a classic exam question.", level: "high" },
+      { tip: "JND / Weber's Law — be able to APPLY it to a marketing scenario (price change, package size, product reformulation).", level: "high" },
+      { tip: "Know all 4 Gestalt principles by name AND give a marketing example for each. Very likely on exams.", level: "high" },
+      { tip: "Sensory marketing: which sense creates which effect? Smell → strongest memory link. Sound → influences shopping pace. Touch → signals quality.", level: "med" },
+      { tip: "Subliminal perception is real (stimuli below awareness ARE processed) but subliminal advertising effectiveness is still debated. Know this nuance!", level: "med" },
+    ]
+  },
+  4: {
+    title: "Memory & Learning",
+    subtitle: "How do consumers store, retrieve, and learn through experience?",
+    emoji: "💡",
+    tags: ["Memory Stages","Classical Conditioning","Operant Conditioning","Schemas","Mere Exposure"],
+    summary: [
+      "3 Memory stages: Sensory (< 2 sec) → Short-term/Working (15-30 sec, ~7 items) → Long-term (unlimited)",
+      "Encoding = getting info into memory. Storage = keeping it. Retrieval = getting it back out",
+      "Elaborative encoding: linking new info to existing knowledge = stronger, more durable memory",
+      "Retrieval cues help bring memories back — context, mood, smells are powerful cues",
+      "Classical Conditioning: neutral stimulus + unconditioned stimulus → conditioned response (Pavlov)",
+      "Example: Brand (neutral) + happy music (unconditioned) → brand feels happy (conditioned)",
+      "Operant Conditioning: reward desired behavior → increases frequency (loyalty programs, discounts)",
+      "Observational/Vicarious Learning: learning by watching others (influencers, social proof)",
+      "Schema = mental framework organizing knowledge — brands must fit or deliberately challenge schemas",
+      "Mere Exposure Effect: repeated exposure alone increases liking, even without conscious recognition",
+      "Brand familiarity built through repetition creates preference automatically"
+    ],
+    terms: [
+      { t: "Sensory memory", d: "Very brief storage of raw sensory input (< 2 seconds). Vast majority is discarded immediately without processing." },
+      { t: "Short-term memory", d: "Working memory — holds approximately 7 (± 2) items for 15-30 seconds. Rehearsal moves items to long-term memory." },
+      { t: "Long-term memory", d: "Relatively permanent, unlimited capacity storage. Divided into explicit (declarative) and implicit (procedural/emotional) memory." },
+      { t: "Classical conditioning", d: "Learning by association: neutral stimulus + unconditioned stimulus → conditioned response. Pavlov's bell → dog salivation." },
+      { t: "Operant conditioning", d: "Learning through consequences: behavior followed by reward increases; followed by punishment decreases." },
+      { t: "Schema", d: "A cognitive mental framework or template organizing knowledge about a concept, person, or brand." },
+      { t: "Mere exposure effect", d: "Simply repeated exposure to a stimulus increases liking for it — no reasoning required." },
+      { t: "Retrieval cues", d: "Stimuli (smells, music, context) that trigger recall of associated memories from long-term storage." },
+    ],
+    flashcards: [
+      { q: "What are the 3 stages of memory and their durations?", a: "1. Sensory memory (< 2 seconds — raw input) 2. Short-term / Working memory (15-30 seconds, ~7 items) 3. Long-term memory (relatively permanent, unlimited capacity)." },
+      { q: "What is Classical Conditioning in marketing?", a: "Pairing a brand (neutral stimulus) repeatedly with something positive (unconditioned stimulus) until the brand alone triggers positive feelings. Example: Coke + happiness → Coke makes you feel happy." },
+      { q: "What is Operant Conditioning in marketing?", a: "Rewarding desired consumer behavior to increase its frequency. Example: loyalty programs reward purchases → consumers buy more to earn points and rewards." },
+      { q: "What is the Mere Exposure Effect?", a: "Repeated exposure to a stimulus increases our liking for it automatically — even without conscious recognition. This is why repetitive advertising builds brand preference." },
+      { q: "What is a Schema and how does it relate to branding?", a: "A mental template of expectations about a concept. E.g. 'fast food = cheap and unhealthy'. Brands must either match consumer schemas to feel familiar, or deliberately break them to stand out." },
+      { q: "What is Elaborative Encoding?", a: "Connecting new information to existing knowledge and giving it meaning, which creates stronger and more retrievable memory traces. Marketers use stories and analogies to trigger this." },
+    ],
+    quiz: [
+      { q: "Which memory type has the shortest duration?", opts: ["Long-term memory","Short-term / Working memory","Semantic memory","Sensory memory"], ans: 3, exp: "Sensory memory lasts less than 2 seconds — it stores raw sensory input before any cognitive processing occurs. Most is lost immediately." },
+      { q: "A coffee brand always plays relaxing jazz in ads. After repeated exposure, the brand alone makes consumers feel relaxed. This is:", opts: ["Operant conditioning","Observational learning","Classical conditioning","Schema activation"], ans: 2, exp: "Classical conditioning: the brand (neutral stimulus) is repeatedly paired with relaxing jazz (unconditioned stimulus) until the brand alone triggers relaxation." },
+      { q: "Loyalty cards that give reward points for purchases use which learning principle?", opts: ["Classical conditioning","Operant conditioning","Mere exposure effect","Gestalt closure"], ans: 1, exp: "Operant conditioning — purchase behavior is followed by a reward (points), which increases the likelihood of repeat purchase behavior." },
+      { q: "The 'Mere Exposure Effect' explains why:", opts: ["Consumers prefer completely new and novel products","Repeated advertising alone increases brand preference and liking","Emotional advertisements are always more effective","Consumers make impulsive purchases more often"], ans: 1, exp: "Mere exposure effect: simply being exposed to something repeatedly increases positive feelings toward it — without any deliberate reasoning or evaluation." },
+      { q: "Short-term memory can hold approximately how many items?", opts: ["3-4 items","7 items (± 2)","15-20 items","Unlimited capacity"], ans: 1, exp: "Miller's Law: short-term (working) memory holds roughly 7 ± 2 items. This is why product codes, phone numbers, and ads are designed with chunks." },
+    ],
+    examTips: [
+      { tip: "Know the 3 memory stages in ORDER with their approximate DURATIONS — this is a very common MCQ question.", level: "high" },
+      { tip: "Classical vs Operant conditioning: Classical = automatic association (stimulus-response). Operant = reward/punishment shapes behavior.", level: "high" },
+      { tip: "Be able to IDENTIFY which conditioning type is shown in a marketing scenario — this is a classic exam application question.", level: "high" },
+      { tip: "Mere exposure effect = repetition → automatic liking. No deep processing required! This is why frequency of advertising matters.", level: "med" },
+      { tip: "Schema: mental template. Brands either MATCH schemas (feel familiar/trustworthy) or BREAK them (stand out/memorable). Both strategies work.", level: "med" },
+    ]
+  },
+  5: {
+    title: "Attitudes",
+    subtitle: "How do consumers form and change evaluations of products and brands?",
+    emoji: "💬",
+    tags: ["ABC Model","Cognitive Dissonance","Katz's Functions","Attitude Formation","Attitude Change"],
+    summary: [
+      "Attitude = a learned, relatively stable predisposition to evaluate an object favorably or unfavorably",
+      "Attitudes are LEARNED (not innate) and relatively (not absolutely) stable",
+      "ABC Model: Affect (feeling) + Behavior (action/intention) + Cognition (belief/knowledge)",
+      "All three components should be consistent — inconsistency leads to attitude change",
+      "Attitude ≠ behavior: attitudes don't always predict behavior (e.g. social norms, habits)",
+      "Katz's Functional Theory: attitudes serve 4 functions — utilitarian, value-expressive, ego-defensive, knowledge",
+      "Attitude formation: via direct experience, classical conditioning, social learning, advertising",
+      "Cognitive Dissonance: uncomfortable feeling when two cognitions conflict → motivation to resolve it",
+      "Post-purchase dissonance (buyer's remorse): resolved by seeking positive information or reducing importance",
+      "Attitude change: easier via central route (high involvement) with strong, relevant arguments",
+      "Marketers use post-purchase communication to reduce dissonance (thank-you emails, reassuring ads)"
+    ],
+    terms: [
+      { t: "Attitude", d: "A learned, relatively stable predisposition to evaluate a person, object, or issue favorably or unfavorably." },
+      { t: "ABC Model", d: "Affect (emotional feelings) + Behavior (actions/intentions) + Cognition (beliefs/knowledge) — the three interconnected components of attitude." },
+      { t: "Cognitive Dissonance", d: "The psychological discomfort experienced when two cognitions (beliefs, behaviors) are in conflict. Creates motivation to resolve the inconsistency." },
+      { t: "Katz's Functional Theory", d: "Attitudes serve 4 functions: utilitarian, value-expressive, ego-defensive, and knowledge function." },
+      { t: "Utilitarian function", d: "Attitude helps maximize rewards and minimize punishments — based on practical benefits and outcomes." },
+      { t: "Value-expressive function", d: "Attitude expresses the consumer's core values, self-concept, and identity to others." },
+      { t: "Ego-defensive function", d: "Attitude protects self-image from threats or enhances self-esteem (e.g. buying luxury to feel successful)." },
+      { t: "Knowledge function", d: "Attitude provides a framework to organize information and simplify decision-making." },
+    ],
+    flashcards: [
+      { q: "What is an attitude in consumer behavior?", a: "A learned, relatively stable predisposition to evaluate an object (product, brand, or idea) in a consistently favorable or unfavorable way." },
+      { q: "What does ABC stand for in the ABC Model of attitudes?", a: "A = Affect (emotional feelings toward the object), B = Behavior (actions, intentions, tendencies), C = Cognition (beliefs and knowledge). All three interact." },
+      { q: "What is Cognitive Dissonance and when does it occur in marketing?", a: "Psychological discomfort when two cognitions conflict. In marketing: occurs after a major purchase (buyer's remorse). Consumers then seek reassurance, minimize the decision's importance, or rationalize." },
+      { q: "What are the 4 functions in Katz's Functional Theory of Attitudes?", a: "1. Utilitarian (practical rewards/punishments) 2. Value-expressive (expresses identity and values) 3. Ego-defensive (protects/enhances self-image) 4. Knowledge (organizes information, simplifies decisions)." },
+      { q: "How do marketers reduce post-purchase cognitive dissonance?", a: "Follow-up emails congratulating the purchase, warranties, positive customer testimonials, reassuring ads, loyalty programs — all confirm the consumer made the right choice." },
+      { q: "Can attitudes accurately predict behavior? Why or why not?", a: "Not always. Attitude-behavior consistency is stronger when: involvement is high, attitude is accessible, social norms align, and no strong habits compete. Many factors intervene." },
+    ],
+    quiz: [
+      { q: "In the ABC model of attitudes, 'Affect' refers to:", opts: ["Beliefs and knowledge about a product","Actions and purchase intentions","Emotional feelings toward an attitude object","Factual information about a brand"], ans: 2, exp: "Affect = the emotional/feeling component of an attitude — how you feel emotionally about something (love, trust, disgust, fear)." },
+      { q: "A consumer buys an expensive laptop then feels worried it was the wrong decision. This is:", opts: ["Schema violation","Cognitive dissonance","Low involvement processing","Peripheral route persuasion"], ans: 1, exp: "Cognitive dissonance — the uncomfortable conflict between 'I spent a lot on this' and 'was it really the right choice?' Creates psychological discomfort." },
+      { q: "Buying a luxury brand to feel more successful and confident is an example of which attitude function?", opts: ["Utilitarian function","Knowledge function","Ego-defensive function","Value-expressive function"], ans: 2, exp: "Ego-defensive function — the purchase/attitude protects or enhances self-image against insecurities. The brand serves as a psychological shield." },
+      { q: "Which component of the ABC model relates to beliefs and knowledge?", opts: ["Affect","Behavior","Cognition","Action"], ans: 2, exp: "Cognition = the beliefs, knowledge, and thoughts component of attitude. E.g. 'I believe Brand X uses high-quality ingredients'." },
+      { q: "Attitudes are BEST described as:", opts: ["Innate and genetically determined","Learned and relatively stable","Always positive evaluations only","Always accurate predictors of behavior"], ans: 1, exp: "Attitudes are LEARNED (through experience, conditioning, social influence) and relatively stable — meaning they resist change but can be modified." },
+    ],
+    examTips: [
+      { tip: "ABC Model: Affect=feelings, Behavior=actions/intentions, Cognition=beliefs. ALL three components are testable separately!", level: "high" },
+      { tip: "Cognitive dissonance = post-purchase doubt/discomfort. Know how marketers REDUCE it (follow-up communication, reassurance).", level: "high" },
+      { tip: "Know all 4 functions of Katz's Functional Theory with a clear example for each. Common scenario-based questions.", level: "high" },
+      { tip: "Attitudes are LEARNED, not innate. They are RELATIVELY stable — can change but resist change. Exam will test this.", level: "med" },
+      { tip: "Attitude does NOT always predict behavior! Higher involvement + accessible attitude + aligned social norms = better predictor.", level: "med" },
+    ]
+  },
+  6: {
+    title: "Persuasion",
+    subtitle: "How do marketers change beliefs, attitudes, and behaviors?",
+    emoji: "🎯",
+    tags: ["ELM","Source Credibility","Fear Appeals","Cialdini's 6 Principles","Social Proof","Scarcity"],
+    summary: [
+      "Persuasion = intentionally changing a person's beliefs, attitudes, or behaviors through communication",
+      "ELM: Central route (high involvement, process arguments) vs Peripheral route (low involvement, surface cues)",
+      "Source credibility: Expertise + Trustworthiness + Attractiveness — all three increase persuasion",
+      "Message factors: one-sided vs two-sided arguments, emotional vs rational appeals",
+      "Two-sided messages are more credible for educated/skeptical audiences (acknowledge drawbacks)",
+      "Fear appeals: effective ONLY when threat is credible AND a clear, easy solution is provided",
+      "Protection Motivation Theory: fear + solution = behavior change. Fear alone = avoidance",
+      "Cialdini's 6 Principles: Reciprocity, Commitment, Social Proof, Authority, Liking, Scarcity",
+      "Social proof: people follow others' behavior when uncertain — '5 million customers served'",
+      "Scarcity: limited availability increases perceived value and urgency (FOMO)",
+      "Reciprocity: giving something free creates psychological obligation to give back"
+    ],
+    terms: [
+      { t: "Persuasion", d: "The intentional process of changing a person's attitudes, beliefs, or behaviors through communication and argument." },
+      { t: "ELM", d: "Elaboration Likelihood Model: Central route (deep logical processing, high involvement) vs Peripheral route (surface cues, low involvement)." },
+      { t: "Source credibility", d: "How trustworthy, expert, and attractive the message source is perceived to be. Higher credibility = more persuasive." },
+      { t: "Fear appeal", d: "Using threat or fear in a message to motivate behavior change. Most effective with a clear, easy solution." },
+      { t: "Social proof", d: "The tendency to follow the behavior of others in uncertain situations. E.g. '5 million customers', user ratings, testimonials." },
+      { t: "Scarcity principle", d: "Limited supply or availability increases perceived value and urgency. 'Only 3 left in stock!' triggers FOMO." },
+      { t: "Reciprocity", d: "When someone gives us something, we feel psychologically obligated to give back. Free samples exploit this." },
+      { t: "Two-sided message", d: "A persuasive message that acknowledges some drawbacks or counterarguments — appears more honest, increases credibility." },
+    ],
+    flashcards: [
+      { q: "What is the Elaboration Likelihood Model (ELM)?", a: "A model of persuasion with two routes: Central route = careful, logical processing of arguments (high involvement). Peripheral route = surface cues like celebrity, music, or packaging (low involvement)." },
+      { q: "What three factors determine source credibility?", a: "1. Expertise (is the source knowledgeable about the topic?) 2. Trustworthiness (is the source honest and unbiased?) 3. Attractiveness (is the source likeable and similar to the audience?)." },
+      { q: "When are fear appeals most effective?", a: "When: 1) The threat is real and credible, AND 2) A clear, easy-to-follow solution is provided. Fear alone without a solution causes avoidance and denial — counterproductive." },
+      { q: "What is the Scarcity Principle and how is it used?", a: "Limited availability increases perceived value and creates urgency. 'Only 2 left in stock!', 'Limited edition', 'Sale ends tonight' — all trigger FOMO and accelerate purchase decisions." },
+      { q: "How does Reciprocity work in marketing?", a: "When brands give something free (sample, gift, discount, useful content), consumers feel psychologically obligated to give back — often by buying, sharing, or staying loyal." },
+      { q: "What is the difference between one-sided and two-sided messages?", a: "One-sided: only positive claims. Two-sided: acknowledges some drawbacks too. Two-sided is MORE credible because it seems honest and balanced — more persuasive for educated, skeptical audiences." },
+    ],
+    quiz: [
+      { q: "In the ELM, which route is used when a consumer is highly motivated and able to process information carefully?", opts: ["Peripheral route","Emotional route","Central route","Social proof route"], ans: 2, exp: "Central route — when consumers are both motivated AND able to process, they engage in deep, logical evaluation of arguments and evidence." },
+      { q: "A toothpaste ad features a dentist in a white coat recommending the product. This primarily uses:", opts: ["Reciprocity","Source credibility (expertise)","Scarcity principle","Fear appeal"], ans: 1, exp: "Source credibility — the dentist signals expertise, making the product's claims more believable and persuasive." },
+      { q: "Fear appeals are MOST effective when:", opts: ["The fear is highly exaggerated to maximize impact","A clear and easy solution is provided alongside the threat","The audience is very young","No solution is given so the fear dominates"], ans: 1, exp: "Protection Motivation Theory: fear + specific, easy solution = motivated behavior change. Fear alone causes avoidance, denial, or panic — no behavior change." },
+      { q: "Amazon displaying 'Only 1 left in stock!' is an example of:", opts: ["Social proof","Reciprocity","Scarcity principle","Classical conditioning"], ans: 2, exp: "Scarcity principle — limited availability increases perceived value and creates urgency (FOMO), triggering faster purchase decisions." },
+      { q: "Free samples distributed in supermarkets primarily use which persuasion principle?", opts: ["Fear appeals","Social proof","Scarcity","Reciprocity"], ans: 3, exp: "Reciprocity — giving the consumer something free creates a psychological obligation to 'give back', often by purchasing the product or brand." },
+    ],
+    examTips: [
+      { tip: "ELM: Central route = logic/arguments (high involvement). Peripheral route = cues/shortcuts (low involvement). This is a CORE exam topic — know both routes deeply.", level: "high" },
+      { tip: "Source credibility = Expertise + Trustworthiness + Attractiveness. Know all 3 dimensions and be able to identify them in examples.", level: "high" },
+      { tip: "Fear appeals need BOTH threat AND easy solution to be effective. Solution alone is insufficient. Threat alone = avoidance.", level: "high" },
+      { tip: "Cialdini's 6 principles: Reciprocity, Commitment/Consistency, Social Proof, Authority, Liking, Scarcity. Know all 6 with examples.", level: "med" },
+      { tip: "Two-sided messages = more credible = better for educated, skeptical audiences. One-sided = better for already-convinced, less educated audiences.", level: "med" },
+    ]
+  }
+};
+
+let currentLec = 1;
+let fcIndex = 0;
+let fcRevealed = false;
+let quizIndex = 0;
+let quizAnswered = false;
+let quizScores = [];
+let selectedOpt = -1;
+let currentTab = 'summary';
+
+function selectLec(n, btn) {
+  document.querySelectorAll('.lec-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  currentLec = n;
+  fcIndex = 0; fcRevealed = false;
+  quizIndex = 0; quizAnswered = false; quizScores = []; selectedOpt = -1;
+  currentTab = 'summary';
+  renderMain();
+}
+
+function renderMain() {
+  if (currentLec === 'mock') { renderMock(); return; }
+  const d = LECTURES[currentLec];
+  let html = `
+  <div class="lec-header">
+    <div class="lec-emoji">${d.emoji}</div>
+    <div>
+      <h2>Lecture ${currentLec}: ${d.title}</h2>
+      <p>${d.subtitle}</p>
+      <div class="lec-tags">${d.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn${currentTab==='summary'?' active':''}" onclick="switchTab('summary')">📋 Summary</button>
+    <button class="tab-btn${currentTab==='terms'?' active':''}" onclick="switchTab('terms')">📖 Terms</button>
+    <button class="tab-btn${currentTab==='flashcards'?' active':''}" onclick="switchTab('flashcards')">🃏 Flashcards</button>
+    <button class="tab-btn${currentTab==='quiz'?' active':''}" onclick="switchTab('quiz')">🧪 Quiz</button>
+    <button class="tab-btn${currentTab==='exam'?' active':''}" onclick="switchTab('exam')">⭐ Exam Tips</button>
+  </div>
+  <div id="tab-content"></div>`;
+  document.getElementById('main-content').innerHTML = html;
+  renderTab();
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const idx = ['summary','terms','flashcards','quiz','exam'].indexOf(tab);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+  renderTab();
+}
+
+function renderTab() {
+  const el = document.getElementById('tab-content');
+  if (!el) return;
+  if (currentTab === 'summary') el.innerHTML = renderSummary();
+  else if (currentTab === 'terms') el.innerHTML = renderTerms();
+  else if (currentTab === 'flashcards') el.innerHTML = renderFlashcards();
+  else if (currentTab === 'quiz') el.innerHTML = renderQuiz();
+  else if (currentTab === 'exam') el.innerHTML = renderExam();
+}
+
+function renderSummary() {
+  const d = LECTURES[currentLec];
+  return `<div class="card">
+    <h3><span class="icon">📋</span> Key Points — Lecture ${currentLec}: ${d.title}</h3>
+    <ul class="summary-list">${d.summary.map(s => `<li>${s}</li>`).join('')}</ul>
+  </div>`;
+}
+
+function renderTerms() {
+  const d = LECTURES[currentLec];
+  return `<div class="card">
+    <h3><span class="icon">📖</span> Key Terms & Definitions</h3>
+    <div class="terms-grid">${d.terms.map(t => `
+      <div class="term-card">
+        <div class="term-name">${t.t}</div>
+        <div class="term-def">${t.d}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderFlashcards() {
+  const d = LECTURES[currentLec];
+  const cards = d.flashcards;
+  const card = cards[fcIndex];
+  const dots = cards.map((_, i) => `<div class="dot${i === fcIndex ? ' current' : i < fcIndex ? ' seen' : ''}"></div>`).join('');
+  return `
+  <div class="card">
+    <h3><span class="icon">🃏</span> Flashcards (${fcIndex+1} of ${cards.length})</h3>
+    <div class="fc-progress">
+      <div><div class="fc-count">${fcIndex+1}/${cards.length}</div><div class="fc-label">card</div></div>
+      <div class="fc-dots">${dots}</div>
+    </div>
+    <div class="flashcard${fcRevealed?' revealed':''}" onclick="revealCard()">
+      <div class="fc-mode-label">${fcRevealed ? '✓ Answer' : '🤔 Question — click to reveal'}</div>
+      <div class="fc-question">${card.q}</div>
+      <div class="fc-answer">${card.a}</div>
+    </div>
+    <p class="fc-hint">${fcRevealed ? 'Click Next to continue' : 'Click the card to reveal the answer'}</p>
+    <div class="fc-nav">
+      <button class="btn" onclick="prevCard()" ${fcIndex===0?'disabled':''}>← Prev</button>
+      <button class="btn btn-primary" onclick="nextCard()">${fcIndex===cards.length-1?'Restart ↺':'Next →'}</button>
+    </div>
+  </div>`;
+}
+
+function revealCard() { fcRevealed = true; renderTab(); }
+function nextCard() {
+  const cards = LECTURES[currentLec].flashcards;
+  fcIndex = fcIndex >= cards.length - 1 ? 0 : fcIndex + 1;
+  fcRevealed = false; renderTab();
+}
+function prevCard() {
+  if (fcIndex > 0) { fcIndex--; fcRevealed = false; renderTab(); }
+}
+
+function renderQuiz() {
+  const d = LECTURES[currentLec];
+  const qs = d.quiz;
+  const total = qs.length;
+  const correct = quizScores.filter(Boolean).length;
+  const dots = qs.map((_, i) => {
+    let cls = i < quizScores.length ? (quizScores[i] ? 'done-ok' : 'done-no') : (i === quizIndex ? 'current' : '');
+    return `<div class="dot ${cls}" style="${quizScores[i]===true?'background:#639922;border-color:#639922':quizScores[i]===false?'background:#E24B4A;border-color:#E24B4A':''}"></div>`;
+  }).join('');
+
+  if (quizIndex >= total) {
+    const pct = Math.round(correct / total * 100);
+    const msg = pct >= 80 ? '🎉 Excellent! You know this lecture very well.' : pct >= 60 ? '👍 Good work! Review the questions you missed.' : '📚 Keep studying — go back to the flashcards for the tricky topics.';
+    return `<div class="card">
+      <h3><span class="icon">🧪</span> Quiz Complete!</h3>
+      <div class="quiz-complete">
+        <div class="score-big">${pct}%</div>
+        <div class="score-label">${correct} out of ${total} correct</div>
+        <div class="score-msg">${msg}</div>
+        <div style="margin-top:1.5rem;display:flex;gap:8px;justify-content:center">
+          <button class="btn" onclick="restartQuiz()">↺ Restart Quiz</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  const q = qs[quizIndex];
+  let optsHtml = q.opts.map((opt, i) => {
+    let cls = '';
+    if (quizAnswered) {
+      if (i === q.ans) cls = 'correct';
+      else if (i === selectedOpt && i !== q.ans) cls = 'wrong';
+    }
+    return `<button class="quiz-opt ${cls}" onclick="answerQuiz(${i})" ${quizAnswered?'disabled':''}><strong>${String.fromCharCode(65+i)}.</strong> ${opt}</button>`;
+  }).join('');
+
+  let feedbackHtml = '';
+  if (quizAnswered) {
+    const ok = selectedOpt === q.ans;
+    feedbackHtml = `<div class="quiz-feedback show ${ok?'ok':'no'}">${ok?'✓ Correct! ':'✗ Incorrect. '}<strong>${q.exp}</strong></div>`;
+    feedbackHtml += `<button class="btn btn-primary" onclick="nextQuestion()">Next →</button>`;
+  }
+
+  return `<div class="card">
+    <h3><span class="icon">🧪</span> Quiz — Question ${quizIndex+1} of ${total}</h3>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.25rem">
+      <div style="font-size:20px;font-weight:600;color:var(--purple)">${quizIndex+1}/${total}</div>
+      <div class="fc-dots">${dots}</div>
+    </div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options">${optsHtml}</div>
+    ${feedbackHtml}
+  </div>`;
+}
+
+function answerQuiz(i) {
+  if (quizAnswered) return;
+  selectedOpt = i;
+  quizAnswered = true;
+  quizScores.push(LECTURES[currentLec].quiz[quizIndex].ans === i);
+  renderTab();
+}
+function nextQuestion() { quizIndex++; quizAnswered = false; selectedOpt = -1; renderTab(); }
+function restartQuiz() { quizIndex = 0; quizAnswered = false; quizScores = []; selectedOpt = -1; renderTab(); }
+
+function renderExam() {
+  const d = LECTURES[currentLec];
+  const tips = d.examTips.map(t => {
+    const badge = t.level === 'high'
+      ? '<span class="priority-badge priority-high">High priority</span>'
+      : '<span class="priority-badge priority-med">Medium</span>';
+    return `<div class="tip-item">${badge} ${t.tip}</div>`;
+  }).join('');
+  return `<div class="card">
+    <h3><span class="icon">⭐</span> Exam Tips — Lecture ${currentLec}: ${d.title}</h3>
+    ${tips}
+  </div>`;
+}
+
+function renderMock() {
+  const html = `
+  <div class="mock-intro">
+    <h3>📝 Full Mock Exam Generator</h3>
+    <p>Select which lectures to include in your mock exam, then click Generate. The mock exam will include MCQ questions drawn from all selected lectures — just like your real exam.</p>
+    <div class="lec-select-grid">
+      ${[1,2,3,4,5,6].map(n => `
+        <label class="lec-check">
+          <input type="checkbox" id="mock-lec-${n}" checked>
+          Lecture ${n}
+        </label>`).join('')}
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;font-size:14px" onclick="startMockExam()">Generate Mock Exam →</button>
+  </div>`;
+  document.getElementById('main-content').innerHTML = html;
+}
+
+function startMockExam() {
+  const selected = [1,2,3,4,5,6].filter(n => document.getElementById('mock-lec-' + n)?.checked);
+  if (selected.length === 0) { alert('Please select at least one lecture.'); return; }
+
+  let allQ = [];
+  selected.forEach(n => {
+    LECTURES[n].quiz.forEach(q => allQ.push({ ...q, lecNum: n }));
+  });
+  allQ = allQ.sort(() => Math.random() - 0.5);
+
+  window._mockQ = allQ;
+  window._mockIdx = 0;
+  window._mockScores = [];
+  window._mockAnswered = false;
+  window._mockSelectedOpt = -1;
+  renderMockExam();
+}
+
+function renderMockExam() {
+  const qs = window._mockQ;
+  const idx = window._mockIdx;
+  const total = qs.length;
+  const correct = window._mockScores.filter(Boolean).length;
+
+  if (idx >= total) {
+    const pct = Math.round(correct / total * 100);
+    const msg = pct >= 80 ? '🎉 Excellent result! You are well prepared.' : pct >= 60 ? '👍 Good effort! Review your weak areas.' : '📚 More practice needed — go back to individual lectures.';
+    document.getElementById('main-content').innerHTML = `
+    <div class="card">
+      <h3><span class="icon">📝</span> Mock Exam Complete</h3>
+      <div class="quiz-complete">
+        <div class="score-big">${pct}%</div>
+        <div class="score-label">${correct} out of ${total} correct</div>
+        <div class="score-msg">${msg}</div>
+        <div style="margin-top:1.5rem;display:flex;gap:8px;justify-content:center">
+          <button class="btn" onclick="selectLec('mock',null)">↺ New Mock Exam</button>
+        </div>
+      </div>
+    </div>`;
+    return;
+  }
+
+  const q = qs[idx];
+  let optsHtml = q.opts.map((opt, i) => {
+    let cls = '';
+    if (window._mockAnswered) {
+      if (i === q.ans) cls = 'correct';
+      else if (i === window._mockSelectedOpt && i !== q.ans) cls = 'wrong';
+    }
+    return `<button class="quiz-opt ${cls}" onclick="answerMock(${i})" ${window._mockAnswered?'disabled':''}><strong>${String.fromCharCode(65+i)}.</strong> ${opt}</button>`;
+  }).join('');
+
+  let feedbackHtml = '';
+  if (window._mockAnswered) {
+    const ok = window._mockSelectedOpt === q.ans;
+    feedbackHtml = `<div class="quiz-feedback show ${ok?'ok':'no'}">${ok?'✓ Correct! ':'✗ Incorrect. '}<strong>${q.exp}</strong></div>
+    <button class="btn btn-primary" onclick="nextMock()">Next →</button>`;
+  }
+
+  const dots = qs.map((_, i) => {
+    const cls = i < window._mockScores.length ? (window._mockScores[i] ? 'background:#639922' : 'background:#E24B4A') : i === idx ? 'background:var(--purple)' : '';
+    return `<div class="dot" style="width:7px;height:7px;${cls}"></div>`;
+  }).join('');
+
+  document.getElementById('main-content').innerHTML = `
+  <div class="card">
+    <h3><span class="icon">📝</span> Mock Exam — Q${idx+1} of ${total} <span style="font-size:12px;color:var(--text3);font-weight:400;margin-left:8px">Lec ${q.lecNum}</span></h3>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.25rem">
+      <div style="font-size:20px;font-weight:600;color:var(--purple)">${idx+1}/${total}</div>
+      <div class="fc-dots">${dots}</div>
+      <div style="margin-left:auto;font-size:13px;color:var(--text2)">Score: ${correct}/${idx}</div>
+    </div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options">${optsHtml}</div>
+    ${feedbackHtml}
+  </div>`;
+}
+
+function answerMock(i) {
+  if (window._mockAnswered) return;
+  window._mockSelectedOpt = i;
+  window._mockAnswered = true;
+  window._mockScores.push(window._mockQ[window._mockIdx].ans === i);
+  renderMockExam();
+}
+function nextMock() {
+  window._mockIdx++;
+  window._mockAnswered = false;
+  window._mockSelectedOpt = -1;
+  renderMockExam();
+}
+
+// Init
+renderMain();
+
+// ── MOBILE FUNCTIONS ──────────────────────────────────────────
+function openDrawer() {
+  document.getElementById('mob-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('mob-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+function mobSelectLec(n) {
+  closeDrawer();
+  // update drawer active state
+  document.querySelectorAll('.mob-lec-item').forEach(el => el.classList.remove('active'));
+  const item = document.getElementById('mob-item-' + n);
+  if (item) item.classList.add('active');
+  // update desktop sidebar too
+  document.querySelectorAll('.lec-btn').forEach(b => b.classList.remove('active'));
+  const sideBtn = document.querySelectorAll('.lec-btn')[n - 1];
+  if (sideBtn) sideBtn.classList.add('active');
+  currentLec = n;
+  fcIndex = 0; fcRevealed = false;
+  quizIndex = 0; quizAnswered = false; quizScores = []; selectedOpt = -1;
+  currentTab = 'summary';
+  updateMobNav('summary');
+  renderMain();
+}
+function mobTab(tab) {
+  if (currentLec === 'mock') { mobMock(); return; }
+  currentTab = tab;
+  updateMobNav(tab);
+  renderMain();
+  window.scrollTo(0, 0);
+}
+function mobMock() {
+  document.querySelectorAll('.lec-btn').forEach(b => b.classList.remove('active'));
+  currentLec = 'mock';
+  updateMobNav('mock');
+  renderMain();
+  window.scrollTo(0, 0);
+}
+function updateMobNav(active) {
+  const map = { summary: 'mob-btn-sum', flashcards: 'mob-btn-fc', quiz: 'mob-btn-qz', mock: 'mob-btn-mock' };
+  document.querySelectorAll('.mob-btn').forEach(b => b.classList.remove('active'));
+  if (map[active]) document.getElementById(map[active]).classList.add('active');
+}
+</script>
+</body>
+</html>
