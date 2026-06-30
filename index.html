@@ -496,6 +496,9 @@
     <button class="sidebar-action" onclick="selectLec('mock', null)">
       📝 Full Mock Exam
     </button>
+    <a href="Neuromarketing_Exam_Study_Guide.pdf" target="_blank" class="sidebar-action" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+      📘 Full Study Guide (PDF)
+    </a>
   </nav>
 
   <!-- MAIN CONTENT -->
@@ -559,6 +562,10 @@
     <div class="mob-lec-num">6</div>
     <div><div class="mob-lec-title">Persuasion</div><div class="mob-lec-sub">ELM · Cialdini</div></div>
   </button>
+  <a href="Neuromarketing_Exam_Study_Guide.pdf" target="_blank" class="mob-lec-item" style="text-decoration:none">
+    <div class="mob-lec-num">📘</div>
+    <div><div class="mob-lec-title">Full Study Guide</div><div class="mob-lec-sub">Open the detailed PDF</div></div>
+  </a>
 </div>
 
 <script>
@@ -935,6 +942,16 @@ function renderSummary() {
   return `<div class="card">
     <h3><span class="icon">📋</span> Key Points — Lecture ${currentLec}: ${d.title}</h3>
     <ul class="summary-list">${d.summary.map(s => `<li>${s}</li>`).join('')}</ul>
+  </div>
+  <div class="card" style="background:var(--purple-light);border-color:var(--border2)">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="font-size:24px">📘</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600;color:var(--purple-dark)">Want deeper information?</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:2px">Check the full Exam Study Guide — extra studies, exam traps, and practice MCQs for every lecture.</div>
+      </div>
+      <a href="Neuromarketing_Exam_Study_Guide.pdf" target="_blank" class="btn btn-primary" style="text-decoration:none;white-space:nowrap;flex-shrink:0">Open Guide ↗</a>
+    </div>
   </div>`;
 }
 
